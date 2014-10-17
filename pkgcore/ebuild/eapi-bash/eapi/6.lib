@@ -1,0 +1,6 @@
+# Copyright: 2014 Tim Harder <radhermit@gmail.com>
+# license GPL2/BSD 3
+
+source "${PKGCORE_BIN_PATH}"/eapi/5.lib
+
+:

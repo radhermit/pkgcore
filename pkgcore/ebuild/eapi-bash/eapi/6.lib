@@ -3,6 +3,8 @@
 
 source "${PKGCORE_BIN_PATH}"/eapi/5.lib
 
+BANNED_FUNCS+=( einstall )
+
 get_libdir() { __get_libdir lib; }
 
 eapply() {

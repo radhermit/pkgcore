@@ -9,4 +9,28 @@ eapply() {
 	:
 }
 
+eapply_user() {
+	local patchroot=${ROOT:-/}etc/portage/patches
+	local patch patches=()
+
+	# Determine if there are patches to apply, filenames must match *.diff or
+	# *.patch to be included.
+	#
+	# valid patch locations:
+	#   - ${CATEGORY}/${PF}(:${SLOT})
+	#   - ${CATEGORY}/${P}(:${SLOT})
+	#   - ${CATEGORY}/${PN}(:${SLOT})
+	# TODO: implement var push/pop function to handle setting LC_COLLATE=C here
+	__shopt_push -s nullglob
+	for patch in "${patchroot}"/${CATEGORY}/{${PF},${P},${PN}}{,:${SLOT%/*}}/*.{diff,patch}; do
+		[[ -f ${patch} ]] && patches+=( ${patch} )
+	done
+	__shopt_pop
+
+	if [[ -n ${patches[@]} ]]; then
+		einfo "Applying user patches ..."
+		eapply "${patches[@]}"
+	fi
+}
+
 :

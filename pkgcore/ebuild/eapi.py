@@ -103,6 +103,9 @@ eapi_optionals = mappings.ImmutableDict({
 
     # Controls whether unpack supports absolute paths; see PMS.
     "unpack_absolute_paths":False,
+
+    # Controls whether unpack supports absolute paths; see PMS.
+    "unpack_case_insensitive": False,
 })
 
 
@@ -241,7 +244,8 @@ common_env_optionals = mappings.ImmutableDict(dict.fromkeys(
      "doman_language_detect", "doman_language_override",
      "econf_disable_dependency_tracking", "econf_disable_silent_rules",
      "econf_docdir_and_htmldir", "new_reads_stdin",
-     "nonfatal_die", "profile_iuse_injection", "unpack_absolute_paths",),
+     "nonfatal_die", "profile_iuse_injection", "unpack_absolute_paths",
+     "unpack_case_insensitive",),
     convert_bool_to_bash_bool))
 
 
@@ -347,6 +351,7 @@ eapi6 = EAPI.register("6",
         nonfatal_die=True,
         is_supported=False,
         unpack_absolute_paths=True,
+        unpack_case_insensitive=True,
     )),
     ebd_env_options=eapi5.ebd_env_options,
 )

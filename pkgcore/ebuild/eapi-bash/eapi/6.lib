@@ -7,6 +7,10 @@ BANNED_FUNCS+=( einstall )
 
 get_libdir() { __get_libdir lib; }
 
+in_iuse() {
+	[[ $1 =~ ${PKGCORE_IUSE_EFFECTIVE} ]]
+}
+
 einstalldocs() {
 	local docs
 

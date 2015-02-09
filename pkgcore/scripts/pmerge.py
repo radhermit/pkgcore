@@ -128,6 +128,9 @@ resolution_options.add_argument(
     '-b', '--buildpkg', action='store_true',
     help="build binary packages")
 resolution_options.add_argument(
+    '-B', '--buildpkgonly', action='store_true',
+    help="only build binary packages without merging to the filesystem")
+resolution_options.add_argument(
     '-k', '--usepkg', action='store_true',
     help="prefer to use binpkgs")
 resolution_options.add_argument(

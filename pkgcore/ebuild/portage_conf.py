@@ -280,6 +280,10 @@ def mk_simple_cache(config_root, tree_loc):
         kls = 'pkgcore.cache.flat_hash.md5_cache'
         tree_loc = pjoin(config_root, tree_loc.lstrip('/'))
         cache_parent_dir = pjoin(tree_loc, 'metadata', 'md5-cache')
+    elif os.path.exists(pjoin(tree_loc, 'metadata', 'cache')):
+        kls = 'pkgcore.cache.metadata.database'
+        tree_loc = pjoin(config_root, tree_loc.lstrip('/'))
+        cache_parent_dir = pjoin(tree_loc, 'metadata', 'cache')
     else:
         kls = 'pkgcore.cache.flat_hash.database'
         tree_loc = pjoin(config_root, 'var', 'cache', 'edb', 'dep', tree_loc.lstrip('/'))
@@ -487,22 +491,6 @@ def config_from_make_conf(location="/etc/", profile_override=None, **kwargs):
         'ignore_paludis_versioning': ('ignore-paludis-versioning' in features),
     })
 
-    rsync_portdir_cache = 'metadata-transfer' not in features
-    # if a metadata cache exists, use it.
-    if rsync_portdir_cache:
-        for cache_type, frag in (('flat_hash.md5_cache', 'md5-cache'),
-                                 ('metadata.database', 'cache')):
-            if not os.path.exists(pjoin(main_repo, 'metadata', frag)):
-                continue
-            new_config["cache:%s/metadata/cache" % (main_repo,)] = basics.AutoConfigSection({
-                'class': 'pkgcore.cache.' + cache_type,
-                'readonly': True,
-                'location': main_repo,
-            })
-            break
-        else:
-            rsync_portdir_cache = False
-
     repo_map = {}
 
     for tree_loc in repos:
@@ -531,8 +519,6 @@ def config_from_make_conf(location="/etc/", profile_override=None, **kwargs):
         kwds['cache'] = cache_name
         if tree_loc == main_repo:
             kwds['class'] = 'pkgcore.ebuild.repository.tree'
-            if rsync_portdir_cache:
-                kwds['cache'] = 'cache:%s/metadata/cache %s' % (main_repo, cache_name)
         else:
             kwds['parent_repo'] = main_repo
         new_config[tree_loc] = basics.AutoConfigSection(kwds)
